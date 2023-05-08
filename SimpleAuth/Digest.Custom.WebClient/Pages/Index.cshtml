@@ -1,0 +1,29 @@
+﻿@page
+@model Digest.WebClient.Pages.IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    
+    @if (!string.IsNullOrEmpty(Model.ResourceServerResponse ))
+    {
+        <p>Response from server: @Model.ResourceServerResponse</p>
+    }
+
+    <form method="post">
+        Login (andreyka26_):
+        <input asp-for="UserName" value="andreyka26_"/>
+        Password (mypass1):
+        <input asp-for="Password" value="mypass1"/>
+
+        <input type="hidden" asp-for="Realm" />
+        <input type="hidden" asp-for="Nonce" />
+        <input type="hidden" asp-for="Qop" />
+        <input type="hidden" asp-for="Opaque" />
+
+        <input type="submit" />
+    </form>
+</div>

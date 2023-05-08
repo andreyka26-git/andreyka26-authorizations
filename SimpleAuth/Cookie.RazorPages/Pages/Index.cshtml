@@ -1,0 +1,26 @@
+﻿@page
+@model IndexModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+
+@{
+}
+
+@if (HttpContextAccessor.HttpContext?.User?.Identity != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Hello @HttpContextAccessor.HttpContext.User.Identity.Name</h1>
+            <p>Username: @HttpContextAccessor.HttpContext.User.Identity.Name</p>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            You are not authenticated
+        </div>
+    </div>
+}
+
+<h1>Cookie Sample</h1>

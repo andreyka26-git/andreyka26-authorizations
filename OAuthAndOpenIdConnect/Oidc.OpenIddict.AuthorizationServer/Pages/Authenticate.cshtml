@@ -1,0 +1,20 @@
+﻿@page
+@model Oidc.OpenIddict.AuthorizationServer.Pages.AuthenticateModel
+
+@*Please do not forget to add tag helper*@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+}
+
+Authenticate
+
+<div>@Model.AuthStatus</div>
+<div>Return url: @Model.ReturnUrl</div>
+
+<form method="post">
+    <input name="email" value="@Model.Email"/>
+    <input name="password" value="@Model.Password" />
+
+    <input type="submit" />
+</form>
