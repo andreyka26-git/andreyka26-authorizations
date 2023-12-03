@@ -140,6 +140,7 @@ namespace OAuth.OpenIddict.AuthorizationServer.Controllers
             return SignIn(new ClaimsPrincipal(identity), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
+        [HttpGet("~/connect/logout")]
         [HttpPost("~/connect/logout")]
         public async Task<IActionResult> LogoutPost()
         {
