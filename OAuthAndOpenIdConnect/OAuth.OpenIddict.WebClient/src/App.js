@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getAccessToken, getUserName, isAuthenticated, logout } from './services/AuthService'
+import { getUser, logout } from './services/AuthService'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UnAuthenticated from './pages/unauthenticated.page';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -7,17 +7,42 @@ import OAuthCallback from './pages/oauth-callback.page';
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
-  const [userName, setUserName] = useState('');
+  const [user, setUser] = useState('');
   const [rendering, setRendering] = useState(true);
+  const [resource, setResource] = useState('')
 
   useEffect(() => {
-    async function getToken() {
-      setAuthenticated(await isAuthenticated());
-      setUserName(await getUserName());
+    async function fetchData() {
+      const user = await getUser();
+
+      setAuthenticated(!!user?.access_token);
+      setUser(user);
       setRendering(false);
+
+      if (!!user?.access_token) {
+        const url = 'https://localhost:7002/resources';
+        const options = {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${user?.access_token}`
+          }
+        };
+
+        try {
+          const response = await fetch(url, options);
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+          }
+
+          const data = await response.text();
+          setResource(data);
+        } catch (error) {
+          console.error('There was an error fetching the data', error);
+        }
+      }
     }
 
-    getToken();
+    fetchData();
   }, [authenticated]);
 
   if (rendering) {
@@ -31,7 +56,12 @@ function App() {
 
         <Route path={'/resources'} element={
           <ProtectedRoute authenticated={authenticated} redirectPath='/'>
-            <div>Authenticated {JSON.stringify(userName)}</div>
+            <div>Authenticated {JSON.stringify(user)}</div>
+            
+            <br></br>
+            
+            <div>Resource: {resource}</div>
+
             <button onClick={logout}>Log out</button>
           </ProtectedRoute>
         } />

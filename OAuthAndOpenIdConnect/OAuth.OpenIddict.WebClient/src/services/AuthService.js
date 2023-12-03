@@ -8,7 +8,10 @@ const settings = {
     silent_redirect_uri: 'http://localhost:3000/oauth/callback',
     post_logout_redirect_uri: 'http://localhost:3000/',
     response_type: 'code',
-    scope: 'api1 profile'
+    // this is for getting user.profile data
+    //scope: 'api1 openid profile'
+    // this is just for OAuth2 flow
+    scope: 'api1'
 };
 
 const userManager = new UserManager(settings);
@@ -48,9 +51,9 @@ export async function getAccessToken() {
     return user?.access_token;
 }
 
-export async function getUserName() {
+export async function getUser() {
     const user = await userManager.getUser();
-    return user?.profile;
+    return user;
 }
 
 export async function logout() {
