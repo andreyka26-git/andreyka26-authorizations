@@ -8,7 +8,7 @@ const settings = {
     silent_redirect_uri: 'http://localhost:3000/oauth/callback',
     post_logout_redirect_uri: 'http://localhost:3000/',
     response_type: 'code',
-    scope: 'api1'
+    scope: 'api1 profile'
 };
 
 const userManager = new UserManager(settings);
@@ -46,6 +46,11 @@ export async function renewToken() {
 export async function getAccessToken() {
     const user = await userManager.getUser();
     return user?.access_token;
+}
+
+export async function getUserName() {
+    const user = await userManager.getUser();
+    return user?.profile;
 }
 
 export async function logout() {

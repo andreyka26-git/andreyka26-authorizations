@@ -65,6 +65,9 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("https://localhost:7002")
             .AllowAnyHeader();
+        
+        policy.WithOrigins("http://localhost:3000")
+            .AllowAnyHeader();
     });
 });
 
@@ -73,8 +76,11 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var seeder = scope.ServiceProvider.GetRequiredService<ClientsSeeder>();
+    
     seeder.AddOidcDebuggerClient().GetAwaiter().GetResult();
     seeder.AddWebClient().GetAwaiter().GetResult();
+    seeder.AddReactClient().GetAwaiter().GetResult();
+    
     seeder.AddScopes().GetAwaiter().GetResult();
 }
 

@@ -179,6 +179,7 @@ namespace Oidc.OpenIddict.AuthorizationServer.Controllers
             return Ok(claims);
         }
 
+        [HttpGet("~/connect/logout")]
         [HttpPost("~/connect/logout")]
         public async Task<IActionResult> Logout()
         {
