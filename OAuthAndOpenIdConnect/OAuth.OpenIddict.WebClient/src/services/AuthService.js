@@ -8,7 +8,7 @@ const settings = {
     silent_redirect_uri: 'http://localhost:3000/oauth/callback',
     post_logout_redirect_uri: 'http://localhost:3000/',
     response_type: 'code',
-    // this is for getting user.profile data
+    // this is for getting user.profile data, when open id connect is implemented
     //scope: 'api1 openid profile'
     // this is just for OAuth2 flow
     scope: 'api1'
@@ -62,6 +62,8 @@ export async function logout() {
 }
 
 // This function is used to access token claims
+// `.profile` is available in Open Id Connect implementations
+// in simple OAuth2 it is empty, because UserInfo endpoint does not exist
 // export async function getRole() {
 //     const user = await userManager.getUser();
 //     return user?.profile?.role;

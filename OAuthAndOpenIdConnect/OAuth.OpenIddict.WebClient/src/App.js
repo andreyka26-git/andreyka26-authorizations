@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UnAuthenticated from './pages/unauthenticated.page';
 import ProtectedRoute from './components/ProtectedRoute';
 import OAuthCallback from './pages/oauth-callback.page';
+import { getResources } from './services/Api';
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -14,32 +15,17 @@ function App() {
   useEffect(() => {
     async function fetchData() {
       const user = await getUser();
-
-      setAuthenticated(!!user?.access_token);
+      const accessToken = user?.access_token; 
+      
+      setAuthenticated(!!accessToken);
       setUser(user);
-      setRendering(false);
-
-      if (!!user?.access_token) {
-        const url = 'https://localhost:7002/resources';
-        const options = {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${user?.access_token}`
-          }
-        };
-
-        try {
-          const response = await fetch(url, options);
-          if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
-          }
-
-          const data = await response.text();
-          setResource(data);
-        } catch (error) {
-          console.error('There was an error fetching the data', error);
-        }
+      
+      if (!!accessToken) {
+        const data = getResources();
+        setResource(data);
       }
+
+      setRendering(false);
     }
 
     fetchData();
@@ -56,11 +42,11 @@ function App() {
 
         <Route path={'/resources'} element={
           <ProtectedRoute authenticated={authenticated} redirectPath='/'>
-            <div>Authenticated {JSON.stringify(user)}</div>
+            <div>Authenticated OAuth Server result: {JSON.stringify(user)}</div>
             
             <br></br>
             
-            <div>Resource: {resource}</div>
+            <div>Resource got with access token: {resource}</div>
 
             <button onClick={logout}>Log out</button>
           </ProtectedRoute>
