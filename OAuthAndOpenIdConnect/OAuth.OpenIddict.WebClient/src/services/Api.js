@@ -5,7 +5,7 @@ export async function getResources(token) {
     const options = {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${user?.access_token}`
+        'Authorization': `Bearer ${token}`
       }
     };
 
