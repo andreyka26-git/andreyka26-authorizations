@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { getUser, logout } from './services/AuthService'
+import { getUser, logout, getAuthConfig, setAuthConfig } from './services/AuthService'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UnAuthenticated from './pages/unauthenticated.page';
 import ProtectedRoute from './components/ProtectedRoute';
+import { getResources as getAndreykaResources, getGithubResources } from './services/Api';
 import OAuthCallback from './pages/oauth-callback.page';
-import { getResources } from './services/Api';
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -13,7 +13,15 @@ function App() {
   const [resource, setResource] = useState('')
 
   useEffect(() => {
+    setAuthConfig()
+
     async function fetchData() {
+      if (!getAuthConfig()) {
+        setAuthenticated(false);
+        setRendering(false);
+        return;
+      }
+
       const user = await getUser();
       const accessToken = user?.access_token; 
       
@@ -21,7 +29,16 @@ function App() {
       setUser(user);
       
       if (!!accessToken) {
-        const data = getResources();
+        let data = [];
+
+        if (getAuthConfig() === 'github') {
+          data = await getGithubResources(accessToken);
+        } 
+
+        if (getAuthConfig() === 'andreyka') {
+          data = await getAndreykaResources(accessToken);
+        }
+
         setResource(data);
       }
 
