@@ -1,5 +1,4 @@
-import { andreykaConfig, githubConfig } from '../config';
-import { sendOAuthRequest, setAuthConfig } from '../services/AuthService';
+import { sendOAuthRequest } from '../services/AuthService';
 import { Navigate } from "react-router-dom";
 
 function UnAuthenticated({ authenticated }) {
@@ -11,19 +10,7 @@ function UnAuthenticated({ authenticated }) {
     <>
       You are not authenticated - Log In first
       <br></br>
-      <button onClick={async (_) => {
-        localStorage.setItem('auth-method', 'andreyka');
-        setAuthConfig();
-        
-        await sendOAuthRequest();
-      }}>Login via andreyka26</button>
-
-      <button onClick={async (_) => {
-        localStorage.setItem('auth-method', 'github');
-        setAuthConfig();
-
-        await sendOAuthRequest();
-      }}>Login via Github</button>
+      <button onClick={(_) => sendOAuthRequest()}>Login via andreyka26</button>
     </>
   )
 }

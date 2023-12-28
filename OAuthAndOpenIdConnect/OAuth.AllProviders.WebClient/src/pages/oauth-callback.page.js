@@ -15,6 +15,7 @@ function OAuthCallback() {
             }
 
             isProcessed.current = true;
+
             const currentUrl = window.location.href;
 
             await handleOAuthCallback(currentUrl);

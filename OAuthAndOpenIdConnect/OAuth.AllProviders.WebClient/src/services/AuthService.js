@@ -1,7 +1,24 @@
 import { UserManager } from 'oidc-client-ts';
-import { andreykaConfig } from '../config';
+import { andreykaConfig, githubConfig } from '../config';
 
-const userManager = new UserManager(andreykaConfig.settings);;
+let userManager;
+
+export function getAuthConfig() {
+    console.log('auth-method')
+    return localStorage.getItem('auth-method');
+}
+
+export function setAuthConfig() {
+    const config = localStorage.getItem('auth-method');
+
+    if (config === 'github') {
+        userManager = new UserManager(githubConfig.settings);
+    }
+
+    if (config === 'andreyka') {
+        userManager = new UserManager(andreykaConfig.settings);
+    }
+}
 
 export async function isAuthenticated() {
     let token = await getAccessToken();

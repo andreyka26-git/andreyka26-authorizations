@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { getUser, logout } from './services/AuthService'
+import { getUser, logout, getAuthConfig, setAuthConfig } from './services/AuthService'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UnAuthenticated from './pages/unauthenticated.page';
 import ProtectedRoute from './components/ProtectedRoute';
-import { getResources as getAndreykaResources } from './services/Api';
+import { getResources as getAndreykaResources, getGithubResources } from './services/Api';
 import OAuthCallback from './pages/oauth-callback.page';
 
 function App() {
@@ -13,15 +13,32 @@ function App() {
   const [resource, setResource] = useState('')
 
   useEffect(() => {
-    async function fetchData() {
-      const user = await getUser();
-      const accessToken = user?.access_token;
+    setAuthConfig()
 
+    async function fetchData() {
+      if (!getAuthConfig()) {
+        setAuthenticated(false);
+        setRendering(false);
+        return;
+      }
+
+      const user = await getUser();
+      const accessToken = user?.access_token; 
+      
       setAuthenticated(!!accessToken);
       setUser(user);
-
+      
       if (!!accessToken) {
-        const data = await getAndreykaResources(accessToken);;
+        let data = [];
+
+        if (getAuthConfig() === 'github') {
+          data = await getGithubResources(accessToken);
+        } 
+
+        if (getAuthConfig() === 'andreyka') {
+          data = await getAndreykaResources(accessToken);
+        }
+
         setResource(data);
       }
 
@@ -43,9 +60,9 @@ function App() {
         <Route path={'/resources'} element={
           <ProtectedRoute authenticated={authenticated} redirectPath='/'>
             <div>Authenticated OAuth Server result: {JSON.stringify(user)}</div>
-
+            
             <br></br>
-
+            
             <div>Resource got with access token: {resource}</div>
 
             <button onClick={logout}>Log out</button>
