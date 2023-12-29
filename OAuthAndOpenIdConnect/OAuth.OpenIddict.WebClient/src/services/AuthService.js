@@ -1,15 +1,17 @@
 import { UserManager } from 'oidc-client-ts';
-import { andreykaConfig } from '../config';
+import { andreykaConfig } from '../utils/config';
 
 const userManager = new UserManager(andreykaConfig.settings);;
 
+export async function getUser() {
+    const user = await userManager.getUser();
+    return user;
+}
+
 export async function isAuthenticated() {
-    let token = await getAccessToken();
+    const token = await getAccessToken();
 
-    if (!token)
-        return false;
-
-    return true;
+    return !!token;
 }
 
 export async function handleOAuthCallback(callbackUrl) {
@@ -23,7 +25,7 @@ export async function handleOAuthCallback(callbackUrl) {
 }
 
 export async function sendOAuthRequest() {
-    await userManager.signinRedirect();
+    return await userManager.signinRedirect();
 }
 
 // renews token using refresh token
@@ -34,14 +36,10 @@ export async function renewToken() {
 }
 
 export async function getAccessToken() {
-    const user = await userManager.getUser();
+    const user = getUser();
     return user?.access_token;
 }
 
-export async function getUser() {
-    const user = await userManager.getUser();
-    return user;
-}
 
 export async function logout() {
     await userManager.clearStaleState()

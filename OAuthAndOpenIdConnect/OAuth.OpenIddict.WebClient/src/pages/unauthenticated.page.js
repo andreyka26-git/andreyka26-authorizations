@@ -8,9 +8,9 @@ function UnAuthenticated({ authenticated }) {
 
   return (
     <>
-      You are not authenticated - Log In first
-      <br></br>
-      <button onClick={(_) => sendOAuthRequest()}>Login via andreyka26</button>
+      <span>You are not authenticated - Log In first</span>
+      <br />
+      <button onClick={sendOAuthRequest}>Login via andreyka26</button>
     </>
   )
 }
