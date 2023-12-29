@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Navigate } from "react-router-dom";
 import { handleOAuthCallback } from "../services/AuthService"
 
 function OAuthCallback() {
@@ -15,10 +16,15 @@ function OAuthCallback() {
             }
 
             isProcessed.current = true;
-            const currentUrl = window.location.href;
 
-            await handleOAuthCallback(currentUrl);
-            window.location = window.location.origin + '/resources';
+            try {
+                const currentUrl = window.location.href;
+                await handleOAuthCallback(currentUrl);
+
+                return <Navigate to="/resources" replace />;
+            } catch (error) {
+                console.error("Error processing OAuth callback:", error);
+            }
         }
 
         processOAuthResponse();

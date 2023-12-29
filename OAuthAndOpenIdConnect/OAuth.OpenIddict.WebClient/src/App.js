@@ -7,31 +7,31 @@ import { getResources as getAndreykaResources } from './services/Api';
 import OAuthCallback from './pages/oauth-callback.page';
 
 function App() {
-  const [authenticated, setAuthenticated] = useState(false);
-  const [user, setUser] = useState('');
-  const [rendering, setRendering] = useState(true);
-  const [resource, setResource] = useState('')
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [resource, setResource] = useState(null)
 
-  useEffect(() => {
-    async function fetchData() {
-      const user = await getUser();
-      const accessToken = user?.access_token;
+  async function fetchData() {
+    const user = await getUser();
+    const accessToken = user?.access_token;
 
-      setAuthenticated(!!accessToken);
-      setUser(user);
+    setUser(user);
 
-      if (!!accessToken) {
-        const data = await getAndreykaResources(accessToken);;
-        setResource(data);
-      }
-
-      setRendering(false);
+    if (accessToken) {
+      const data = await getAndreykaResources(accessToken);;
+      setResource(data);
+      setIsAuthenticated(true);
     }
 
-    fetchData();
-  }, [authenticated]);
+    setIsLoading(false);
+  }
 
-  if (rendering) {
+  useEffect(() => {
+    fetchData();
+  }, [isAuthenticated]);
+
+  if (isLoading) {
     return (<>Loading...</>)
   }
 
@@ -42,12 +42,9 @@ function App() {
 
         <Route path={'/resources'} element={
           <ProtectedRoute authenticated={authenticated} redirectPath='/'>
-            <div>Authenticated OAuth Server result: {JSON.stringify(user)}</div>
-
-            <br></br>
-
-            <div>Resource got with access token: {resource}</div>
-
+            <span>Authenticated OAuth Server result: {JSON.stringify(user)}</span>
+            <br />
+            <span>Resource got with access token: {resource}</span>
             <button onClick={logout}>Log out</button>
           </ProtectedRoute>
         } />
