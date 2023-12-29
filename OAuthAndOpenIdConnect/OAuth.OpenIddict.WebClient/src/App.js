@@ -5,7 +5,6 @@ import UnAuthenticated from './pages/unauthenticated.page';
 import ProtectedRoute from './components/ProtectedRoute';
 import { getResources as getAndreykaResources } from './services/Api';
 import OAuthCallback from './pages/oauth-callback.page';
-import { useLocation } from 'react-router-dom';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -14,8 +13,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   async function fetchData() {
-    console.log('auth')
-    console.log(isAuthenticated);
     const user = await getUser();
     const accessToken = user?.access_token;
 
@@ -33,7 +30,7 @@ function App() {
 
   useEffect(() => {
     fetchData();
-  }, [isAuthenticated, useLocation()]);
+  }, [isAuthenticated]);
 
   if (isLoading) {
     return (<>Loading...</>)
@@ -54,7 +51,7 @@ function App() {
           </ProtectedRoute>
         } />
 
-        <Route path='/oauth/callback' element={<OAuthCallback />} />
+        <Route path='/oauth/callback' element={<OAuthCallback setIsAuthenticated={setIsAuthenticated} />} />
       </Routes>
     </BrowserRouter>
   );

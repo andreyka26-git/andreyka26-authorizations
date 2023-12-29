@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { handleOAuthCallback } from "../services/AuthService"
+import { handleOAuthCallback, isAuthenticated } from "../services/AuthService"
 
-function OAuthCallback() {
+function OAuthCallback({setIsAuthenticated}) {
     // rerendering the components does not change isProcessed, but remounting the component does change.
     const isProcessed = useRef(false);
     const navigate = useNavigate();
@@ -22,7 +22,7 @@ function OAuthCallback() {
                 const currentUrl = window.location.href;
                 await handleOAuthCallback(currentUrl);
 
-                console.log('navigating out')
+                setIsAuthenticated(await isAuthenticated());
                 navigate("/resources");
             } catch (error) {
                 console.error("Error processing OAuth callback:", error);
