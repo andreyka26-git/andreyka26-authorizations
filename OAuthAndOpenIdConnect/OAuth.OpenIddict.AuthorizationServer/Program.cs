@@ -34,6 +34,9 @@ builder.Services.AddOpenIddict()
         options.AddDevelopmentEncryptionCertificate()
                 .AddDevelopmentSigningCertificate();
 
+        // by default tokens are decrypted. If you would like to take a look in the claims - you can disable it
+        //options.DisableAccessTokenEncryption();
+        
         options.UseAspNetCore()
                 .EnableAuthorizationEndpointPassthrough()
                 .EnableLogoutEndpointPassthrough()
