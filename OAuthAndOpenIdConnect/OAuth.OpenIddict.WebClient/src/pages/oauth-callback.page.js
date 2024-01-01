@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { handleOAuthCallback, isAuthenticated } from "../services/AuthService"
 
 function OAuthCallback({setIsAuthenticated}) {
