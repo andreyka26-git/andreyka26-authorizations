@@ -1,5 +1,5 @@
-export async function getResources(token) {
-  const url = 'https://localhost:7002/resources';
+export async function getGithubResources(token) {
+  const url = 'https://api.github.com/users/andreyka26-git/repos';
 
   const options = {
     method: 'GET',
@@ -15,8 +15,8 @@ export async function getResources(token) {
       throw new Error(`Error: ${response.status}`);
     }
 
-    const data = await response.text();
-    return data;
+    const data = await response.json();
+    return data.map(d => d.name).join(', ');
   } catch (error) {
     console.error('There was an error fetching the data', error);
   }

@@ -3,8 +3,8 @@ import { getUser, logout } from './services/AuthService'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UnAuthenticated from './pages/unauthenticated.page';
 import ProtectedRoute from './components/ProtectedRoute';
-import { getResources as getAndreykaResources } from './services/Api';
 import OAuthCallback from './pages/oauth-callback.page';
+import { getGithubResources } from './services/Api';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -21,7 +21,7 @@ function App() {
     if (accessToken) {
       setIsAuthenticated(true);
 
-      const data = await getAndreykaResources(accessToken);
+      const data = await getGithubResources(accessToken);
       setResource(data);
     }
 

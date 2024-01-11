@@ -1,7 +1,7 @@
 import { UserManager } from 'oidc-client-ts';
-import { andreykaConfig } from '../utils/config';
+import { githubConfig } from '../utils/config';
 
-const userManager = new UserManager(andreykaConfig.settings);
+const userManager = new UserManager(githubConfig.settings);
 
 export async function getUser() {
     const user = await userManager.getUser();
