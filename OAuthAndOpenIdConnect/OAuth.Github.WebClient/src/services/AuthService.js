@@ -41,8 +41,14 @@ export async function getAccessToken() {
 }
 
 export async function logout() {
-    await userManager.clearStaleState()
-    await userManager.signoutRedirect();
+    await userManager.clearStaleState();
+
+    try {
+        await userManager.signoutRedirect();
+    } catch (e) {
+        console.log('error on signoutRedirect', e);
+        window.location.href = '/';
+    }
 }
 
 // This function is used to access token claims

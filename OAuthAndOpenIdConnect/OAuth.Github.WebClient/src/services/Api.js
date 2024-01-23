@@ -1,5 +1,5 @@
 export async function getGithubResources(token) {
-  const url = 'https://api.github.com/users/andreyka26-git/repos';
+  const url = 'https://api.github.com/user/repos';
 
   const options = {
     method: 'GET',

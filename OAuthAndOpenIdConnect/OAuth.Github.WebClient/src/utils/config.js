@@ -9,10 +9,10 @@ const githubSettings = {
     response_type: 'code',
     metadata: {
         authorization_endpoint: 'https://github.com/login/oauth/authorize',
-        token_endpoint: 'http://localhost:9999/https://github.com/login/oauth/access_token'
-    }
+        token_endpoint: 'http://localhost:9999/https://github.com/login/oauth/access_token',
+    },
     // this is for getting user.profile data, when open id connect is implemented
-    //scope: 'api1 openid profile'
+    scope: 'repo'
 };
 
 export const githubConfig = {
