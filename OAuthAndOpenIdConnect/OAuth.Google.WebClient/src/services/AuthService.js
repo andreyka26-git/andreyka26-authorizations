@@ -1,7 +1,7 @@
 import { UserManager } from 'oidc-client-ts';
-import { andreykaConfig } from '../utils/config';
+import { googleConfig } from '../utils/config';
 
-const userManager = new UserManager(andreykaConfig.settings);
+const userManager = new UserManager(googleConfig.settings);
 
 export async function getUser() {
     const user = await userManager.getUser();
@@ -41,8 +41,14 @@ export async function getAccessToken() {
 }
 
 export async function logout() {
-    await userManager.clearStaleState()
-    await userManager.signoutRedirect();
+    await userManager.clearStaleState();
+
+    try {
+        await userManager.signoutRedirect();
+    } catch (e) {
+        console.log('error on signoutRedirect', e);
+        window.location.href = '/';
+    }
 }
 
 // This function is used to access token claims

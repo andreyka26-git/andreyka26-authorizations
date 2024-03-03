@@ -1,5 +1,5 @@
 export async function getResources(token) {
-  const url = 'https://localhost:7002/resources';
+  const url = 'https://www.googleapis.com/oauth2/v3/userinfo';
 
   const options = {
     method: 'GET',

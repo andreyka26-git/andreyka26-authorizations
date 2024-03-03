@@ -10,7 +10,7 @@ function UnAuthenticated({ authenticated }) {
     <>
       <span>You are not authenticated - Log In first</span>
       <br />
-      <button onClick={sendOAuthRequest}>Login via andreyka26</button>
+      <button onClick={sendOAuthRequest}>Login via Google</button>
     </>
   )
 }
