@@ -110,7 +110,7 @@ namespace Cookie.Pages.Account
                 return new User()
                 {
                     Email = "andreyka26_",
-                    FullName = "Maria Rodriguez"
+                    FullName = "Andrii Bui"
                 };
             }
             else

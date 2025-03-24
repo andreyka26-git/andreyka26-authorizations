@@ -12,7 +12,7 @@ public class AuthController : ControllerBase
     [HttpPost("auth/login")]
     public async Task<IActionResult> LoginAsync([FromBody] LoginDto req)
     {
-        var user = await AuthenticateUser(req.UserName, req.Password);
+        var user = await BackendOnly.User.AuthenticateUser(req.UserName, req.Password);
 
         if (user == null)
         {
@@ -44,28 +44,6 @@ public class AuthController : ControllerBase
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         return Ok();
-    }
-
-    private async Task<User?> AuthenticateUser(string email, string password)
-    {
-        // For demonstration purposes, authenticate a user
-        // with a static email address. Ignore the password.
-        // Assume that checking the database takes 500ms
-
-        await Task.Delay(500);
-
-        if (email == "andreyka26_" && password == "Mypass1*")
-        {
-            return new User()
-            {
-                Email = "andreyka26_",
-                FullName = "Maria Rodriguez"
-            };
-        }
-        else
-        {
-            return null;
-        }
     }
 }
 
