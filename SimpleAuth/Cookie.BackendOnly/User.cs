@@ -16,15 +16,13 @@ public class User
 
         if (email == "andreyka26_" && password == "Mypass1*")
         {
-            return new User()
+            return new User
             {
                 Email = "andreyka26_",
                 FullName = "Andrii Bui"
             };
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 }
