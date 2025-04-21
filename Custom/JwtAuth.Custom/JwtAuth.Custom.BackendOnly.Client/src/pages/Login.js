@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { authenticate, authServerDomain } from "../services/Api";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
   const [userName, setUserName] = useState("andreyka26_");
   const [password, setPassword] = useState("Mypass1*");
+  const navigate = useNavigate();
 
   const googleReturnUrl = "http://localhost:3000/callback";
   const provider = "Google";
@@ -14,11 +16,13 @@ function LoginPage() {
     event.preventDefault();
 
     const [token, refreshToken] = await authenticate(userName, password);
+    console.log(token, refreshToken);
 
     localStorage.setItem("token", token);
     localStorage.setItem("refreshToken", refreshToken);
 
-    window.location = `${window.location.origin}/`;
+    navigate("/");
+    // window.location = `${window.location.origin}/`;
   }
 
   function handleGoogleSubmit(event) {
