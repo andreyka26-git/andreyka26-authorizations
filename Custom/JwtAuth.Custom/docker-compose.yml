@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: ./JwtAuth.Custom.BackendOnly.Server
+    ports:
+      - "7000:80"
+    environment:
+      - ClientId=clientid
+      - ClientSecret=clientSecret
+      - ConnectionStrings__AuthContextConnection=Host=db;Database=authdb;Username=postgres;Password=postgres
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+
+  client:
+    build:
+      context: ./JwtAuth.Custom.BackendOnly.Client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./JwtAuth.Custom.BackendOnly.Client:/app  # Mount the local code to the container
+    environment:
+      - CHOKIDAR_USEPOLLING=true  # Enables polling for file changes (required for hot reloading)
+    networks:
+      - app-network
+
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: authdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+volumes:
+  pgdata:
+
+networks:
+  app-network:
+    driver: bridge
+

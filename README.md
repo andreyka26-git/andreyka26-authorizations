@@ -15,6 +15,14 @@ The servers implementation uses self signed TLS, if you see HTTPS error in the l
 
 # Projects
 
+## JwtAuth.Custom
+
+Has docker support. Run `docker-compose up` from the JwtAuth.Custom folder with docker-compose.yml.
+
+This is the project for `custom` jwt approach, also classified as Password Credentials in OAuth. It has SPA React client and .NET backend.
+Sign in with Google is also supported.
+
+
 ## Cookie.BackendOnly
 
 Has docker support. Run `docker-compose up` from the Cookie.BackendOnly.

@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OAuthAndOpenIdConnect", "OA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Custom", "Custom", "{6B8CA3A5-34E6-4513-A4A4-761D6746E9C2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwtAuth.Custom.BackendOnly.Server", "Custom\JwtAuth.Custom.BackendOnly.Server\JwtAuth.Custom.BackendOnly.Server.csproj", "{03D15E5A-BBED-4879-9219-00F2FD9A7054}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwtAuth.Custom.BackendOnly.Server", "Custom\JwtAuth.Custom\JwtAuth.Custom.BackendOnly.Server\JwtAuth.Custom.BackendOnly.Server.csproj", "{03D15E5A-BBED-4879-9219-00F2FD9A7054}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cookie.RazorPages", "SimpleAuth\Cookie.RazorPages\Cookie.RazorPages.csproj", "{EB9761B4-DD07-4E3C-BC56-7B2DE45D6F2C}"
 EndProject
