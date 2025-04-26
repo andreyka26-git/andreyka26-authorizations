@@ -3,46 +3,46 @@ import axios from "axios";
 export const authServerDomain = "http://localhost:7000";
 let refreshingFunc = undefined;
 
-axios.interceptors.response.use(
-  (res) => res,
-  async (error) => {
-    const originalConfig = error.config;
-    const token = localStorage.getItem("token");
+// axios.interceptors.response.use(
+//   (res) => res,
+//   async (error) => {
+//     const originalConfig = error.config;
+//     const token = localStorage.getItem("token");
 
-    // if we don't have token in local storage or error is not 401 just return error and break req.
-    if (!token || !isUnauthorizedError(error)) {
-      return Promise.reject(error);
-    }
+//     // if we don't have token in local storage or error is not 401 just return error and break req.
+//     if (!token || !isUnauthorizedError(error)) {
+//       return Promise.reject(error);
+//     }
 
-    try {
-      // the trick here, that `refreshingFunc` is global, e.g. 2 expired requests will get the same function pointer and await same function.
-      if (!refreshingFunc) refreshingFunc = renewToken();
+//     try {
+//       // the trick here, that `refreshingFunc` is global, e.g. 2 expired requests will get the same function pointer and await same function.
+//       if (!refreshingFunc) refreshingFunc = renewToken();
 
-      const [newToken, newRefreshToken] = await refreshingFunc;
-      localStorage.setItem("token", newToken);
-      localStorage.setItem("refreshToken", newRefreshToken);
+//       const [newToken, newRefreshToken] = await refreshingFunc;
+//       localStorage.setItem("token", newToken);
+//       localStorage.setItem("refreshToken", newRefreshToken);
 
-      originalConfig.headers.Authorization = `Bearer ${newToken}`;
+//       originalConfig.headers.Authorization = `Bearer ${newToken}`;
 
-      // retry original request
-      try {
-        return await axios.request(originalConfig);
-      } catch (innerError) {
-        // if original req failed with 401 again - it means server returned not valid token for refresh request
-        if (isUnauthorizedError(innerError)) {
-          throw innerError;
-        }
-      }
-    } catch (err) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("refreshToken");
+//       // retry original request
+//       try {
+//         return await axios.request(originalConfig);
+//       } catch (innerError) {
+//         // if original req failed with 401 again - it means server returned not valid token for refresh request
+//         if (isUnauthorizedError(innerError)) {
+//           throw innerError;
+//         }
+//       }
+//     } catch (err) {
+//       localStorage.removeItem("token");
+//       localStorage.removeItem("refreshToken");
 
-      window.location = `${window.location.origin}/login`;
-    } finally {
-      refreshingFunc = undefined;
-    }
-  }
-);
+//       window.location = `${window.location.origin}/login`;
+//     } finally {
+//       refreshingFunc = undefined;
+//     }
+//   }
+// );
 
 function isUnauthorizedError(error) {
   const {
@@ -57,10 +57,15 @@ export async function authenticate(userName, password) {
     userName: userName,
     password: password,
   };
+  const options = {
+    withCredentials: true,
+    // headers: headers,
+  };
 
   const response = await axios.post(
     `${authServerDomain}/authorization/token`,
-    loginPayload
+    loginPayload,
+    options
   );
 
   const token = response.data.authorizationToken;
@@ -89,19 +94,24 @@ export async function renewToken() {
 }
 
 export async function getResources() {
-  const headers = withAuth();
+  //   const headers = withAuth();
 
   const options = {
-    headers: headers,
+    withCredentials: true,
+    // headers: headers,
   };
 
-  const response = await axios.get(
-    `${authServerDomain}/api/resources`,
-    options
-  );
-  const data = response.data;
+  try {
+    const response = await axios.get(
+      `${authServerDomain}/api/resources`,
+      options
+    );
+    const data = response.data;
 
-  return data;
+    return data;
+  } catch (err) {
+    return "error";
+  }
 }
 
 function withAuth(headers) {

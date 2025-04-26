@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { authenticate, authServerDomain } from "../services/Api";
+import { getResources } from "../services/Api";
 import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
   const [userName, setUserName] = useState("andreyka26_");
   const [password, setPassword] = useState("Mypass1*");
+
+  const [data, setData] = useState("default");
   const navigate = useNavigate();
 
   const googleReturnUrl = "http://localhost:3000/callback";
@@ -21,8 +24,14 @@ function LoginPage() {
     localStorage.setItem("token", token);
     localStorage.setItem("refreshToken", refreshToken);
 
-    navigate("/");
+    // navigate("/");
     // window.location = `${window.location.origin}/`;
+  }
+
+  async function tryGetResources() {
+    const response = await getResources();
+    console.log(response);
+    setData(response);
   }
 
   function handleGoogleSubmit(event) {
@@ -64,6 +73,10 @@ function LoginPage() {
         <input type="hidden" name="provider" value={provider} />
         <button type="submit">Google not Working</button>
       </form>
+      <br />
+      <button onClick={tryGetResources} type="submit">
+        Try get resources
+      </button>
     </div>
   );
 }
