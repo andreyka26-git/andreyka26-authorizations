@@ -90,10 +90,9 @@ app.Urls.Add("http://+:80");
 app.UseCors(builder =>
 {
     builder
-        .WithOrigins("http://localhost:3000")
+        .AllowAnyOrigin()
         .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials();
+        .AllowAnyHeader();
 });
 
 app.UseSwagger();

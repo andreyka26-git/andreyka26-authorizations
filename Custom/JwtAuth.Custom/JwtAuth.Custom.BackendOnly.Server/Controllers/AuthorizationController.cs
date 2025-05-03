@@ -42,7 +42,7 @@ namespace JwtAuth.Custom.BackendOnly.Server.Controllers
         public async Task<IActionResult> GetTokenAsync([FromBody] GetTokenRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
-
+            
             if (user == null)
             {
                 //401 or 404
@@ -58,15 +58,7 @@ namespace JwtAuth.Custom.BackendOnly.Server.Controllers
             }
 
             var resp = await GenerateAuthorizationTokenAsync(user.Id, user.UserName);
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true, // JS can't read it
-                Secure = true, // Only sent over HTTPS
-                SameSite = SameSiteMode.None, // Allows cross-site
-                Expires = DateTime.UtcNow.AddDays(7)
-            };
 
-            Response.Cookies.Append("auth_token", resp.AuthorizationToken, cookieOptions);
             return Ok(resp);
         }
 

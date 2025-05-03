@@ -7,12 +7,10 @@ namespace JwtAuth.Custom.BackendOnly.Server.Controllers
     public class ResourcesController : ControllerBase
     {
         [HttpGet("api/resources")]
-        // [Authorize()]
+        [Authorize()]
         public IActionResult GetResources()
         {
-            Request.Cookies.TryGetValue("auth_token", out var token);
-            Console.WriteLine(token);
-            return Ok($"protected resources, username: {User?.Identity?.Name}, token: {token}");
+            return Ok($"protected resources, username: {User.Identity!.Name}");
         }
     }
 }
